@@ -9,17 +9,24 @@ export function cartReducer(state: ProductsCartState, action: any) {
 
     switch(action.type) {
 
-        case ActionTypes.ADD_NEW_PRODUCT_TO_CART: {
+        case ActionTypes.ADD_NEW_PRODUCT_TO_CART:
+
             return {
                 ...state,
                 productsCart: [...state.productsCart, action.payload.newProduct]
             }
-        }
-
-        case ActionTypes.UPDATE_CART_PRODUCT:
-            return state
+   
         case ActionTypes.REMOVE_CART_PRODUCT:
-            return state
+            
+            const productsWithoutDeleteOne = state.productsCart.filter((product) => {
+                return product.id != action.payload.productInTheCart.id
+            })
+
+            return {
+                ...state,
+                productsCart: productsWithoutDeleteOne
+            }
+  
         default:
             return state
 

@@ -15,14 +15,11 @@ export function addNewProductToCartAction(newProduct: ProductType) {
     }
 }
 
-export function updateCartProductAction() {
+export function removeCartProductAction(productInTheCart: ProductType) {
     return {
-        type: ActionTypes.UPDATE_CART_PRODUCT
-    }
-}
-
-export function removeCartProductAction() {
-    return {
-        type: ActionTypes.REMOVE_CART_PRODUCT
+        type: ActionTypes.REMOVE_CART_PRODUCT,
+        payload: {
+            productInTheCart
+        }
     }
 }

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useReducer } from "react"
 import { ProductType } from "../products/products"
 import { cartReducer } from "../reducers/cart/reducer"
-import { addNewProductToCartAction } from "../reducers/cart/actions"
+import { addNewProductToCartAction, removeCartProductAction } from "../reducers/cart/actions"
 
 interface CartContextProviderProps {
     children: ReactNode
@@ -17,8 +17,6 @@ export const CartContext = createContext({} as CartContextType)
 
 export function CartContextProvider({ children }: CartContextProviderProps) {
 
-    //const [productsCart, setProductsCart] = useState<ProductType[]>([])
-
     const [productsCartState, dispatch] = useReducer(
         cartReducer,
         {
@@ -32,18 +30,16 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     const { productsCart } = productsCartState
 
     function addProductsToCart(product: ProductType) {
-        const productIsAlreadyInTheCart = productsCart.find((productsCart) => productsCart.id == product.id)
+        const productAlreadyInTheCart = productsCart.find((productsCart) => productsCart.id == product.id)
         
-        if (productIsAlreadyInTheCart) {
-            window.alert('já está no carrinho')
+        if (productAlreadyInTheCart) {
+            dispatch(removeCartProductAction(productAlreadyInTheCart))
         }
-        else {
-            //setProductsCart([...productsCart, product])
-            
-            dispatch(addNewProductToCartAction(product))
-        }
+        dispatch(addNewProductToCartAction(product))
         
     }
+
+    console.log(productsCart)
 
     const amountProductsOrder = productsCart.length
 

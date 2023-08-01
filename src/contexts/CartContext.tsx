@@ -39,8 +39,6 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         
     }
 
-    console.log(productsCart)
-
     const amountProductsOrder = productsCart.length
 
     return (

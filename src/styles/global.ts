@@ -7,6 +7,11 @@ export const GlobalStyleComponent = createGlobalStyle`
         box-sizing: border-box;
     }
 
+    :focus {
+        outline: none;
+        border-color: ${(props) => props.theme["base-button"]};
+    }
+
     body {
         background: ${props => props.theme.background};
         color: ${props => props.theme["base-text"]};

@@ -10,136 +10,79 @@ export const CheckoutContainer = styled.main`
     height: 6.5rem;
 
     gap: 2rem;
-
-    section {
-        margin-left: 10rem;
-    }
 `
 
-export const CheckoutAddress = styled.div`
+
+
+
+export const CheckoutProducts = styled.div`
     margin-top: 0.9375rem;
 
     background: ${(props) => props.theme["base-card"]};
 
-    width: 40rem;
-    height: 23.25rem;
+    width: 28rem;
     padding: 2.5rem;
 
-    border-radius: 6px;
+    border-radius: 6px 44px 6px 44px;
 
-    .checkoutAddressForm {
-        margin-top: 1rem;
-
-        p {
-            display: flex;
-            gap: 0.75rem;
-        }
-    }
-`
-
-export const CheckoutTop = styled.div`
-    display: flex;
-    gap: 0.5rem;
-
-    .checkoutTopAddressSpan {
-        color: ${(props) => props.theme["yellow-dark"]};
+    ul {
+        list-style: none;
+        padding: 0;
     }
 
-    .checkoutTopPaymentSpan {
-        color: ${(props) => props.theme.purple};
-    }
-`
-
-export const CheckoutTitle = styled.p`
-    color: ${(props) => props.theme["base-subtitle"]};
-`
-
-export const CheckoutSubtitle = styled.p`
-    color: ${(props) => props.theme["base-text"]};
-    font-size: 0.875rem;
-    margin-top: 2px;
-`
-
-const INPUT_SIZE = {
-    extra_small: "60px",
-    small: "200px",
-    medium: "276px",
-    large: "348px",
-    extra_large: "560px"
-} as const
-
-interface InputProps {
-    inputSize: keyof typeof INPUT_SIZE
-}
-
-export const InputForm = styled.div<InputProps>`
-    position: relative;
-    display: inline-block;
-
-    input {
-        width: ${(props) => INPUT_SIZE[props.inputSize]};
-        height: 2.625rem;
-        padding: 0.875rem;
-        margin-top: 1rem;
-        box-sizing: border-box;
-
-        background: ${(props) => props.theme["base-input"]};
-        color: ${(props) => props.theme["base-text"]};
-
-        border: solid 1px;
-        border-radius: 4px;
-        
-        &::placeholder {
-            color: ${(props) => props.theme["base-label"]};
-        }
-
-        &:focus {
-            border-color: ${(props) => props.theme["yellow-dark"]};
-        }
-
-        &:not(:focus) {
-            border-color: ${(props) => props.theme["base-button"]};
-        }
-
+    li {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        position: relative;
     }
 
-    .optional-text {
+    li::after {
+        content: "";
+        display: block;
+        width: 100%;
+        border-top: 1px solid ${(props) => props.theme["base-button"]}; /* Estilo do hr */
         position: absolute;
-        top: 50%;
-        right: 12px;
-        font-size: 0.75rem;
-        font-style: italic;
-        color: ${(props) => props.theme["base-label"]};
-        pointer-events: none;
+        bottom: -1.5rem; /* Posição acima do espaço de 1rem */
     }
 `
 
-export const CheckoutPayment = styled.div`
-    margin-top: 0.75rem;
-    background: ${(props) => props.theme["base-card"]};
-
-    width: 40rem;
-    padding: 2.5rem;
-    height: 12.9375;
-
-    border-radius: 6px;
-`
-
-export const ButtonPaymentGroup = styled.div`
+export const CheckoutProductsItem = styled.div`
     display: flex;
-    gap: 0.75rem;
-    margin-top: 2rem;
+    gap: 1.25rem;
 `
 
-export const ButtonPayment = styled.button`
+export const CheckoutProductsImage = styled.img`
+    height: 4rem;
+    width: 4rem;
+`
+
+export const CheckoutProductsData = styled.div`
+    
+`
+
+export const CheckoutProductsActions = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+`
+
+export const CheckoutProductsPrice = styled.div`
+    color: ${(props) => props.theme["base-text"]};
+    font-weight: bold;
+`
+
+export const ButtonRemove = styled.button`
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 0.5rem;
-    padding: 1rem;
+    gap: 0.3rem;
+    padding: 1rem 0.5rem;
 
-    height: 3.1875rem;
-    width: 11.125rem;
+    height: 2.375rem;
+    width: 5.6875rem;
 
     border: none;
     border-radius: 6px;
@@ -156,6 +99,11 @@ export const ButtonPayment = styled.button`
 
     &:hover {
         background: ${(props) => props.theme["base-hover"]};
+        color: ${(props) => props.theme["base-subtitle"]};
+
+        .iconColor {
+            color: ${(props) => props.theme["purple-dark"]};
+        }
     }
 
     &:focus {
@@ -163,14 +111,41 @@ export const ButtonPayment = styled.button`
     }
 `
 
+export const CheckoutProductsBill = styled.div`
+    div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
 
-export const CheckoutProducts = styled.div`
-    margin-top: 0.9375rem;
+    .productsBillSmall {
+        font-size: 0.875rem;
+    }
 
-    background: ${(props) => props.theme["base-card"]};
+    .productsBillTotalPrice {
+        font-size: 1.25rem;
+        color: ${(props) => props.theme["base-subtitle"]};
+        font-weight: bold;
+    }
+`
 
-    width: 28rem;
-    padding: 2.5rem;
+export const ButtonCheckoutConfirm = styled.button`
+    width: 100%;
+    height: 2.875rem;
+    color: ${(props) => props.theme.white};
+    background-color: ${(props) => props.theme.yellow};
 
-    border-radius: 6px 44px 6px 44px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 1rem;
+    
+    font-size: 0.875rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${(props) => props.theme["yellow-dark"]};
+    }
 `

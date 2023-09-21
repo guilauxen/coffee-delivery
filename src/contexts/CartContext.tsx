@@ -11,6 +11,7 @@ interface CartContextType {
     productsCart: ProductType[]
     amountProductsOrder: number
     addProductsToCart: (product: ProductType) => void
+    removeProductFromCart: (product: ProductType) => void
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -39,6 +40,13 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         
     }
 
+    function removeProductFromCart(product: ProductType) {
+        console.log(product)
+        const productAlreadyInTheCart = productsCart.find((productsCart) => productsCart.id == product.id)
+        console.log(productAlreadyInTheCart)
+        dispatch(removeCartProductAction(product))
+    }
+
     const amountProductsOrder = productsCart.length
 
     return (
@@ -46,6 +54,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
             productsCart,
             amountProductsOrder,
             addProductsToCart,
+            removeProductFromCart
          }}>
             {children}
         </CartContext.Provider>

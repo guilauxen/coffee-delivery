@@ -26,7 +26,7 @@ export function ProductCart({ product }: ProductCartProps) {
 
     return (
         <ProductCartContainer>
-            <Counter onAmountChange={handleAmountChange} />
+            <Counter onAmountChange={handleAmountChange} initialAmount={amount} />
 
             <BuyButton onClick={handleAddProductToCart} >
                 <ShoppingCart weight="fill" size={22}/>

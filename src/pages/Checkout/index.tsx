@@ -1,147 +1,111 @@
-import { Bank, CreditCard, CurrencyDollar, MapPinLine, Money } from "@phosphor-icons/react"
+import { Trash } from "@phosphor-icons/react"
 import { 
-    ButtonPayment, 
-    ButtonPaymentGroup, 
-    CheckoutAddress, 
+    ButtonCheckoutConfirm,
+    ButtonRemove, 
     CheckoutContainer, 
-    CheckoutPayment, 
     CheckoutProducts, 
-    CheckoutSubtitle, 
-    CheckoutTitle, 
-    CheckoutTop, 
-    InputForm 
+    CheckoutProductsActions, 
+    CheckoutProductsBill, 
+    CheckoutProductsData, 
+    CheckoutProductsImage, 
+    CheckoutProductsItem, 
+    CheckoutProductsPrice, 
 } from "./styles"
 
 import { CartContext } from "../../contexts/CartContext"
-import { useContext } from "react"
+import { useContext, useState } from "react"
+import { Counter } from "../../components/Counter"
+import { CheckoutForm } from "./components/CheckoutForm"
 
 export function Checkout() {
 
-    const { productsCart } = useContext(CartContext)
+    const { productsCart, removeProductFromCart } = useContext(CartContext)
+
+    const [amount, setAmounts] = useState<{ [productId: number]: number }>({});
+ 
+    function handleAmountChange(productId: number, newAmount: number) {
+        setAmounts((prevAmounts) => ({
+            ...prevAmounts,
+            [productId]: newAmount,
+        }));
+    }
     
+    function handleRemoveProduct(product: any) {
+        removeProductFromCart(product)
+    }
+
+    let totalPrice = 0
+    let deliveryPrice = 3.5
+
     return (
         <CheckoutContainer>
-            <section>
-                <h5>Complete seu pedido</h5>
-                <CheckoutAddress>
-
-                    <CheckoutTop>
-                        <div>
-                            <span className="checkoutTopAddressSpan">
-                                <MapPinLine size={22}/>
-                            </span>
-                        </div>
-                        <div>
-                            <CheckoutTitle>
-                                Endereço de entrega
-                            </CheckoutTitle>
-                            <CheckoutSubtitle>
-                                Informe o endereço onde deseja receber o pedido
-                            </CheckoutSubtitle>
-                        </div>
-                    </CheckoutTop>
-                    
-                    <div className="checkoutAddressForm">
-                        <form>
-                            <p>
-                                <InputForm inputSize="small">
-                                    <input type="text" placeholder="CEP" />
-                                </InputForm>  
-                            </p>
-                            <p>
-                                <InputForm inputSize="extra_large">
-                                    <input type="text" placeholder="Rua" />
-                                </InputForm> 
-                            </p>
-                            <p>
-                                <InputForm inputSize="small">
-                                    <input type="number" placeholder="Número" />
-                                </InputForm> 
-                                <InputForm inputSize="large">
-                                    <input type="text" placeholder="Complemento" />
-                                    <span className="optional-text">Opcional</span>
-                                </InputForm> 
-                            </p>
-                            <p>
-                                <InputForm inputSize="small">
-                                    <input type="text" placeholder="Bairro" />
-                                </InputForm> 
-                                <InputForm inputSize="medium">
-                                    <input type="text" placeholder="Cidade" />
-                                </InputForm> 
-                                <InputForm inputSize="extra_small">
-                                    <input 
-                                        type="text" 
-                                        placeholder="UF" 
-                                        maxLength={2} 
-                                        onKeyUpCapture={(event) => {
-                                            event.currentTarget.value = event.currentTarget.value.toUpperCase();
-                                        }} 
-                                    />
-                                </InputForm> 
-                            </p>
-                        </form>
-                    </div>
-                </CheckoutAddress>
-
-                <CheckoutPayment>
-
-                    <CheckoutTop>
-                        <div>
-                            <span className="checkoutTopPaymentSpan">
-                                <CurrencyDollar size={22}/>
-                            </span>
-                        </div>
-                        <div>
-                            <CheckoutTitle>
-                                Pagamento
-                            </CheckoutTitle>
-                            <CheckoutSubtitle>
-                                O pagamento é feito na entrega. Escolha a forma que deseja pagar
-                            </CheckoutSubtitle>
-                        </div>
-                    </CheckoutTop>
-
-                    <ButtonPaymentGroup>
-                        <ButtonPayment>
-                            <CreditCard size={16} className="iconColor"/>
-                            CARTÃO DE CRÉDITO
-                        </ButtonPayment>
-                        <ButtonPayment>
-                            <Bank size={16} className="iconColor"/>
-                            CARTÃO DE DÉBITO
-                        </ButtonPayment>
-                        <ButtonPayment>
-                            <Money size={16} className="iconColor"/>
-                            DINHEIRO
-                        </ButtonPayment>
-                    </ButtonPaymentGroup>
-
-                </CheckoutPayment>
-            </section>
+            <CheckoutForm />
             <aside>
                 <h5>Cafés selecionados</h5>
                 <CheckoutProducts>
-                    <ul>
-                        {productsCart.map(product => {
+                    {productsCart.length > 0 ? (
+                        <div>
+                        <ul>
+                            {productsCart.map((product) => {
+                            const productAmount = amount[product.id] || product.amount;
+                            const productPrice = product.price * productAmount;
+                            totalPrice += productPrice;
+
                             return (
                                 <li key={product.id}>
-                                    <div>
-                                        <img src={product.image}/>
-                                        <div>
-                                            {product.title}
-                                            <p>
-                                                {product.amount}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {product.price}
-                                    </div>
+                                <CheckoutProductsItem>
+                                    <CheckoutProductsImage src={product.image} />
+                                    <CheckoutProductsData>
+                                    {product.title}
+                                    <CheckoutProductsActions>
+                                        <Counter
+                                        onAmountChange={(newAmount) =>
+                                            handleAmountChange(product.id, newAmount)
+                                        }
+                                        initialAmount={product.amount}
+                                        />
+                                        <ButtonRemove
+                                        onClick={() => handleRemoveProduct(product)}
+                                        >
+                                        <Trash size={16} className="iconColor" />
+                                        REMOVER
+                                        </ButtonRemove>
+                                    </CheckoutProductsActions>
+                                    </CheckoutProductsData>
+                                </CheckoutProductsItem>
+                                <CheckoutProductsPrice>
+                                    R$ {(productPrice).toFixed(2).replace('.', ',')}
+                                </CheckoutProductsPrice>
                                 </li>
-                            )
-                        })}
-                    </ul>
+                            );
+                            })}
+                        </ul>
+                        <CheckoutProductsBill>
+                            <div>
+                            <p className="productsBillSmall">Total de itens</p>
+                            <p>R$ {(totalPrice).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                            <div>
+                            <p className="productsBillSmall">Entrega</p>
+                            <p>R$ {(deliveryPrice).toFixed(2).replace('.', ',')}</p>
+                            </div>
+                            <div className="productsBillTotalPrice">
+                            <p>Total</p>
+                            <p>
+                                R${' '}
+                                {(totalPrice + deliveryPrice).toFixed(2).replace('.', ',')}
+                            </p>
+                            </div>
+                        </CheckoutProductsBill>
+                        
+                    
+                        <ButtonCheckoutConfirm form="checkout-form" type="submit">
+                            CONFIRMAR PEDIDO
+                        </ButtonCheckoutConfirm>
+                        </div>
+                    ) : (
+                        <p>Seu carrinho está vazio.</p>
+                    )}
                 </CheckoutProducts>
             </aside>
         </CheckoutContainer>
